@@ -1,0 +1,117 @@
+---
+title: C#实现word模板内容填充
+layout: 2021-06-21 08:00:00
+date: 2021-06-21 09:18:27
+reward: true
+tags: 
+  - C#
+  - winform
+---
+
+## 背景
+
+这是一份来自日常工作中的需求。服务台一位同事请教如何将Excel表格中的数据填充到Word指定的模板内。新生开学季，各院系辅导员代领校园卡。需要打印一份领取卡的协议，协议模版固定，但各院系卡的数量不同。需要从excel表格中抽取院系、领卡总数等数据往word文件中填。
+
+---
+
+## 实现
+
+实现这个功能分三步：从Excel中读取要填充的数据，制作word模板，将读取出的数据往word模板中填充。跟大象放冰箱需要几步一个意思 ~~ 
+
+<!--more-->
+
+### C#读取Excel数据
+Excel表格的数据内容大概如下图，通过OLEDB将Excel数据读取到一个DataSet里面，等会需要遍历这个DataSet的数据来往模板中填充。
+
+![Excel表格数据内容](https://raw.githubusercontent.com/edsiongithub/blogimages/master/20210618/datasource.png)
+
+实现读取Excel数据代码如下：
+``` CSharp
+private static DataSet LoadDataFromExcel(string filePath)
+    {
+        try
+        {
+            string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + filePath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'";
+            OleDbConnection OleConn = new OleDbConnection(strConn);
+            OleConn.Open();
+            String sql = "SELECT * FROM  [本科生$]"; //根据自己要读取的Excel中的Sheet改名字
+
+            OleDbDataAdapter OleDaExcel = new OleDbDataAdapter(sql, OleConn);
+            DataSet OleDsExcle = new DataSet();
+            OleDaExcel.Fill(OleDsExcle, "Sheet1");
+            OleConn.Close();
+            return OleDsExcle;
+        }
+        catch (Exception err)
+        {
+            MessageBox.Show("读取Excel数据失败：" + err.Message, "提示信息",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return null;
+        }
+    }
+```
+### word模板文件制作
+.dot 是word的模板文件格式（word2019模板格式为.dotx)，你可以依据这个模板来生成一系列的类似的文档文件（.doc或.docx)。同事需要的文档内容大致如下。在标记的几个位置需要填充指定的数据（来源自Excel表格）。因此，我们制作一个模板文件，固定内容如图所示，动态填充的数据，我们通过添加书签的方式。
+ 
+ ![word模板文件插入标签](https://raw.githubusercontent.com/edsiongithub/blogimages/master/20210618/wordtemplates.png)
+
+ word中，光标移动到指定位置，选择菜单中的插入->书签。在弹出的书签编辑框中，输入书签名称。比如，我们在图中“制作”和“本科生”之间插入department的书签名，代表这里要填充院系名称。其他位置添加书签方法类似。
+### 数据动态填充word模板
+好了，现在万事具备，只欠写数据了。在```C#```操作word文档之前，需要在项目中添加Com组建，VS项目中右键，“添加引用” --> “COM” --> “MicroSoft Office 15 Object Library”。添加完成后，通过下面的代码即可完成依据模板生成文档。
+``` CSharp
+private void CreateWordDocs_Click(object sender, EventArgs e)
+    {
+        System.Data.DataTable dt = new System.Data.DataTable();
+        dt = LoadDataFromExcel(dataSourceText.Text.Trim()).Tables[0];
+        try
+        {
+            for (int i = 2; i < dt.Rows.Count; i++)
+            {
+                object oMissing = System.Reflection.Missing.Value;
+                //创建一个Word应用程序实例  
+                Microsoft.Office.Interop.Word._Application oWord = new Microsoft.Office.Interop.Word.Application();
+                //设置为不可见  
+                oWord.Visible = false;
+                //模板文件地址，这里假设在X盘根目录  
+                object oTemplate = dataDestinationText.Text.Trim();
+                //以模板为基础生成文档  
+                Microsoft.Office.Interop.Word._Document oDoc = oWord.Documents.Add(ref oTemplate, ref oMissing, ref oMissing, ref oMissing);
+                //声明书签数组  
+                object[] oBookMark = new object[5];
+                //赋值书签名  
+                oBookMark[0] = "department";
+                oBookMark[1] = "cardno";
+                oBookMark[2] = "cardskinno";
+                oBookMark[3] = "registration";
+
+                //赋值任意数据到书签的位置  
+                oDoc.Bookmarks.get_Item(ref oBookMark[0]).Range.Text = dt.Rows[i][0].ToString() + dt.Rows[i][1].ToString();
+                oDoc.Bookmarks.get_Item(ref oBookMark[1]).Range.Text = dt.Rows[i][2].ToString();
+                oDoc.Bookmarks.get_Item(ref oBookMark[2]).Range.Text = dt.Rows[i][2].ToString();
+                oDoc.Bookmarks.get_Item(ref oBookMark[3]).Range.Text = dt.Rows[i][3].ToString();
+
+                //设置文件保存路径
+                string savePath = saveAsText.Text.Trim();
+                object fileName;
+                fileName = savePath + "\\" + dt.Rows[i][0].ToString() + dt.Rows[i][1].ToString();
+                oDoc.SaveAs(ref fileName, ref oMissing, ref oMissing, ref oMissing,
+                            ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
+                            ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
+                            ref oMissing, ref oMissing);
+                oDoc.Close(ref oMissing, ref oMissing, ref oMissing);
+                //关闭word  
+                oWord.Quit(ref oMissing, ref oMissing, ref oMissing);
+            }
+            MessageBox.Show("生成文件完成!");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("错误，请截图发至xxxx" + ex.Message);
+        }
+    }
+ ```
+
+---
+
+## 复盘
+同事的需求过来后，简单搜索一下，有了大概思路。本来同事希望通过邮件模板来做，但最终需要打印，还是做成文档更方便。有了思路以后，通过编程实现不再困难。

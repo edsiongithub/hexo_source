@@ -1,0 +1,118 @@
+---
+layout: 2021-06-24 08:00:00
+date: 2021-06-24 09:18:27
+title:  git常用方法记录
+tag: git
+---
+
+水一篇文章，用来记录常用的一些git命令。以前使用svn作为代码版本控制工具，配合Visual Studio上的VisualSVN插件，直接在Visual Studio中提交代码，作为代码的一个备份工具。对git不是特别了解，目前逐渐接触python、go以及自己的博客管理，对git的依赖和使用越来越频繁。有很多命令还是在用到的时候现去查找，索性做个记录来自己的地方查找。
+
+## git 全局配置
+
+```
+ git config --global user.name "yourname"
+ git config --global user.email "youremail"
+```
+
+<!--more-->
+
+## git 使用步骤
+
+``` bash
+
+git init  #当前目录下创建git仓库
+
+git add .   #将当前目录下所有文件纳入git版本管理
+
+git commit -m 'commit message'      #提交修改至本地仓库
+
+git remote add orgin git@github.com:yourgithubaccout/yourgithubrepository.git
+#将本地仓库与github仓库关联
+
+git push -u origin master   #将本地仓库推送至github仓库
+```
+### 分支
+多人协作开发一个项目的话，可以创建多个分支。一些常用分支命令如下
+
+``` bash
+git branch                      #列出当前分支
+git branch --list               #列出所有分支
+git push -u origin branchname   #本地代码提交至指定分支
+```
+### master分支同步
+
+``` bash
+git checkout master             #切换至master分支
+git pull                        #拉去主分支代码
+git checkout xxx                #切换至自己的分支
+git merge master                #主分支代码merge到自己分支上
+git push origin                 #将自己分支代码提交，保持与master同步
+```
+
+### 官方推荐命令顺序
+
+``` bash
+# create new repository
+echo "# hexo_source" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin git@github.com:edsiongithub/hexo_source.git
+git push -u origin main
+
+
+# push existing repository from command line
+git remote add origin git@github.com:edsiongithub/hexo_source.git
+git branch -M main
+git push -u origin main
+```
+
+
+## ssh设置
+
+hexo博客提交代码时，git报下面的错误，原因是没有配置ssh。打开git bash，输入以下命令，一路回车。最后，去C:\users\youruser 这个目录下找到.ssh。将里面的id_rsa.pub内容复制到github账号管理中的SSH and GPG keys中（右上角账户->setting->SSH and GPG keys ->New）
+
+```
+ssh-keygen -t rsa -C "your_email@example.com"
+```
+一路回车，会在指定位置生成key文件，windowns系统默认在C:\Users\youruser\.ssh 目录下生成id_rsa和id_rsa.pub文件，打开id_rsa.pub文件。github上新建一个SSH key，复制id_rsa.pub内容到github上的sshkey中保存。
+
+![git上传报错](https://raw.githubusercontent.com/edsiongithub/blogimages/master/20210624/error.png)
+
+
+### 双sshkey设置
+
+比如我在电脑上，既想往github上传代码，又想往gitee上传代码，为了避免每次都要输入账号密码，我们就可以创建多个sshkey。默认创建第一个步骤如上面所示，接下来创建第二个sshkey，使用下面的命令，指定存储文件不要覆盖原来的就行了。
+
+```
+ssh-keygen -t rsa -C "youremail" -f /c/Users/youruser/.ssh/github_rsa
+```
+![双sshkey](https://raw.githubusercontent.com/edsiongithub/blogimages/master/20210624/%E5%8F%8Csshkey.png)
+
+接下来在.ssh目录下创建一个config文件，输入以下内容：
+注意IdentifyFile需要跟你创建sshkey时候指定gitee和github存储的rsa文件。为了方便匹配，在创建的时候，建议都使用-f指定存储的文件名（如gitee存储在gitee_rsa，github存储在github_rsa文件）。
+```
+# gitee
+    Host gitee.com
+    HostName gitee.com
+    PreferredAuthentications publickey
+    IdentityFile /c/Users/gxwang/.ssh/id_rsa    
+    User git
+# github
+    Host github.com
+    HostName github.com
+    PreferredAuthentications publickey
+    IdentityFile /c/Users/gxwang/.ssh/github_rsa
+    User git
+
+```
+保存config文件，使用下面的命令测试。出现如下的输出，则说明配置成功了。
+```
+ ssh -T git@github.com
+ ssh -T git@gitee.com
+```
+![测试ssh链接成功](https://raw.githubusercontent.com/edsiongithub/blogimages/master/20210624/ssh%E6%B5%8B%E8%AF%95.png)
+
+
+

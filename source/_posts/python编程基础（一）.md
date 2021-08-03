@@ -1,0 +1,60 @@
+---
+layout:  2021-07-01 09:31:14
+title:  python编程基础(一)
+date: 2021-07-02 13:50:51
+tags:
+    - python
+    - 基础语法
+---
+
+刷leetcode上的题目，使用python将部分题目重做。发现很多python的基础语法不是很牢固，在这里记录一下。这里没打算写一个python的教程，只是记录一些python中和平时其他语言差别比较大，或者说我自己没记忆太深刻的地方。
+
+## 数据类型
+* 数据运算
+整型除以整型，得到一个浮点型小数。
+```python
+print(4/2)  #输出的是2.0，而不是2
+
+// 运算符表示做除法后，向下取整
+print(4//2) #输出2
+```
+<!--more-->
+求幂运算，需要引入math包
+``` python
+import math
+print(pow(2,3)) #2的3次方，输出8
+```
+
+* 字符串
+字符串取反
+```python
+mystr = 'abcde'
+print(mystr[::-1])      #输出 edcba
+```
+截取字符串子串，使用方括号[startindex:endindex]。表示从startindex开始，到endindex前一个元素。
+```python
+mystr = 'abcde'
+print(mystr[0:2])      #输出 ab
+```
+字符串的索引还可以用负值表示，-1表示倒数第一个元素。同样的，-2表示倒数第二个元素，-3表示倒数第三个元素，以此类推。
+
+![python字符串索引](https://wx1.sinaimg.cn/large/8ed9132cly1gs2pjp9kgij208e04u746.jpg)
+
+
+## for循环
+基本格式
+``` python
+for i in range(1,10):
+    pass
+```
+range可以再加一个参数，作为循环的步长。
+``` python
+for  i in range(1, 10, 2):
+    pass
+```
+如果要倒序训话的话，可以将步长设为负值即可。注意下面的代码，i的取值是10到1，如果需要循环到0的话，range的下限设置为-1
+``` python
+for i in range(10, 0, -1):
+    pass
+```
+
