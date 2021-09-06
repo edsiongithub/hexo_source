@@ -22,7 +22,7 @@ export PATH=/home/youruseraccount/anaconda3/bin:$PATH
 ## conda 创建环境并激活
 创建虚拟环境，并指定pyhon版本
 ```
-conda create -n yourenvname python=3.9    #创建环境
+conda create -n yourenvname python=3.9    #创建环境，并指定相关软件的版本
 source activate yourenvname               #启动环境
 conda activate yourenvname                #启动环境（新命令，优于source那条命令）
 ```
