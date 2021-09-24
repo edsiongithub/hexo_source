@@ -3,8 +3,8 @@ layout: post
 title: VisualStudio2019上写python代码
 date: 2020-06-15 09:42:27
 tags: 
-  - visual studio
-  - python
+ - visual studio
+ - python
 ---
 
 # 闲话

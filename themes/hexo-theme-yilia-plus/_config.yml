@@ -288,3 +288,9 @@ friends:
 
 # 关于我
 aboutme: 达文西<br/>毕业于华东师大<br><br>高校信息化工程师一枚<br/><br/>dotnet、dotnet core、python、C#<br/>flask、mvc、jquery、workflow、sqlserver、mysql
+
+mermaid: ## mermaid url https://github.com/knsv/mermaid
+  enable: true
+  version: "8.0.0"
+  options:  # find more api options from https://github.com/knsv/mermaid/blob/master/src/mermaidAPI.js
+    #startOnload: true  // default true

@@ -2,9 +2,6 @@
 title: conda环境管理
 date: 2021-07-01 09:31:14
 layout: 2021-07-01 09:31:14
-tags:
-    - conda
-    - python
 ---
 
 ## conda 安装

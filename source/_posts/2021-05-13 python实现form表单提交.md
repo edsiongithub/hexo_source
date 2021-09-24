@@ -4,7 +4,7 @@ title:  python实现表单自动提交
 reward: true
 date: 2021-05-13 09:42:27
 tags:
-  - python
+ - python
 ---
 
 ## 缘起

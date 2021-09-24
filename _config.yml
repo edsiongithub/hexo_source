@@ -12,7 +12,7 @@ keywords: "dotnet,python,C#,linux,js,jquery,javascript,开发者,程序猿,程�
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://edsiongithub.github.io/
+url: https://gxwang.gitee.io/
 root: /
 permalink: :year/:month/:day/:title/
 tag_dir: tags
@@ -98,9 +98,16 @@ exclude_generator:
 #  repository: git@github.com:litten/litten.github.com.git
 #  branch: master
 
+#部署至github
+# deploy:
+#   type: git
+#   repository: git@github.com:edsiongithub/edsiongithub.github.io
+#   branch: master
+
+#部署至gitee
 deploy:
   type: git
-  repository: git@github.com:edsiongithub/edsiongithub.github.io
+  repository: git@gitee.com:gxwang/gxwang.git
   branch: master
 
 
@@ -135,3 +142,9 @@ jsonContent:
     excerpt: false
     categories: false
     tags: true
+
+# mermaid: ## mermaid url https://github.com/knsv/mermaid
+#   enable: true
+#   version: "8.0.0"
+#   options:  # find more api options from https://github.com/knsv/mermaid/blob/master/src/mermaidAPI.js
+#     #startOnload: true  // default true
