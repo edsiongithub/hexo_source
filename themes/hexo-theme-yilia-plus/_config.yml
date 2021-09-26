@@ -291,6 +291,5 @@ aboutme: 达文西<br/>毕业于华东师大<br><br>高校信息化工程师一�
 
 mermaid: ## mermaid url https://github.com/knsv/mermaid
   enable: true
-  version: "8.0.0"
-  options:  # find more api options from https://github.com/knsv/mermaid/blob/master/src/mermaidAPI.js
-    #startOnload: true  // default true
+  theme: forest
+  cdn: //cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js

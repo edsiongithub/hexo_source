@@ -46,18 +46,3 @@ powershell默认背景色为蓝色，连接到Linux后，由于linux中的目录
 
 ![修改powershell背景色](https://gitee.com/gxwang/blogimages/blob/master/20210916/backgroundcolor.png)
 
-
-
-```mermaid
-   graph TD
-    A(开始) -->
-    B[申请人发起申请] -->
-    C[院系部门审批] -->
-    D{是否同意}
-    D -->|同意| E[信息办审批]
-    D -->|退回| B[申请人发起申请]
-    E -->
-    F{是否同意}
-    F -->|同意| H[资产入库] --> G(结束)
-    F -->|退回| B[申请人发起申请]
-```
