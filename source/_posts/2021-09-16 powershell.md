@@ -44,5 +44,5 @@ ssh username@hostname(IP)
 ### 修改powershell背景颜色
 powershell默认背景色为蓝色，连接到Linux后，由于linux中的目录字体颜色也是蓝色，会导致文字很难看清。进入```C:\Users\username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell```目录，右键powershell的快捷方式，弹出的属性框中选择颜色选项卡，屏幕背景色选择黑色即可。
 
-![修改powershell背景色](https://gitee.com/gxwang/blogimages/blob/master/20210916/backgroundcolor.png)
+![修改powershell背景色](http://gxwang.gitee.io/blogimages/20210916/backgroundcolor.png)
 
