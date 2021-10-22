@@ -46,3 +46,5 @@ powershell默认背景色为蓝色，连接到Linux后，由于linux中的目录
 
 ![修改powershell背景色](http://gxwang.gitee.io/blogimages/20210916/backgroundcolor.png)
 
+
+如果你是从任务栏固定打开的，可以在任务栏上右键powershell，在属性设置页面中选择颜色面板，修改背景颜色即可。
