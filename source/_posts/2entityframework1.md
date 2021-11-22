@@ -1,6 +1,6 @@
 ---
 layout: 2021-10-25 20:34:00
-title: entityframework基础
+title: entityframework基础(一)
 date: 2021-10-26 09:57:41
 tags:
  - C#
