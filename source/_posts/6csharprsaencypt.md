@@ -19,7 +19,7 @@ graph TD
     D --> E[客户端携带token请求其他接口]
     E --> F[服务器端验证token并处理请求]
 ```
-但是对接方api存在两个版本，旧版本并未实现身份认证，所有通信采用RSA的公钥进行加密。所以有一下程序供测试。
+但是对接方api存在两个版本，旧版本并未实现身份认证，所有通信内容采用RSA的公钥进行加密，对方用私钥解密。公钥为pem格式，C#实现RSA加密只支持xml格式，所以有一下程序供测试。
 
 ``` csharp
 static void Main(string[] args)
@@ -93,3 +93,26 @@ Nuget中安装包：Portable.BouncyCastle，程序中添加如下引用，
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 ```
+
+PEM格式公钥，以`-----BEGIN PUBLIC KEY-----`开始，`-----END PUBLIC KEY-----`结束
+```
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUABgQD5MIb5ZQhNGhsUjfFbn7y6nY6tsqV9LcC2s/rLpu9sz8CplsTy2SuTG0o7y9ICXW6oRUC9bVxI8TfTK4bbSrNQ6UoExzQFdbc3pEGun3iCy+inBhIC6xf5Z7lN+WqTKCZ607iLwKh+wDdZc6U4x1rxF4vngk1sXIdnYEoGjpRNLQIDAQAB
+-----END PUBLIC KEY-----
+```
+
+xml格式公钥
+``` xml
+<RSAKeyValue>
+    <Modulus>
+        xA7SEU+e0yQH5rm9kbCDN9o3aPIo7HbP7tX6WOocLZAtNfyxSZDU16ksL6
+        WjubafOqNEpcwR3RdFsT7bCqnXPBe5ELh5u4VEy19MzxkXRgrMvavzyBpV
+        RgBUwUlV5foK5hhmbktQhyNdy/6LpQRhDUDsTvK+g9Ucj47es9AQJ3U=
+    </Modulus>
+    <Exponent>
+        AQAB
+    </Exponent>
+</RSAKeyValue>
+```
+
+C#的RSA加密只实现了公钥加密、私钥解密。而并没有私钥加密，公钥解密的实现。

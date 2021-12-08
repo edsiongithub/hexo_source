@@ -9,7 +9,8 @@ tags:
 
 记录一些EntityFramework中的使用技巧，不定期更新。
 * 日志记录及拦截
-* 
+* IQueryable<T> 与 IEnumerable<T>与延迟加载
+
 <!--more-->
 
 ### 日志记录及拦截
@@ -89,3 +90,27 @@ public class MyDbConfiguration : DbConfiguration
 }
 ```
 ![按自定义格式输出日志](https://raw.githubusercontent.com/edsiongithub/blogimages/master/202111/logs2.png)
+
+
+### IQueryable<T> 与 IEnumerable<T>与延迟加载
+
+简单总结：IQueryable<T> 用来生成sql语句，而并不立即执行查询。它是在需要是（如调用.ToList()方法时，去查询数据）。 IEnumerable<T>是将
+所有数据加载至内存中，再进行Where、OrderBy等操作。同时，IEnumerable不仅仅针对数据库数据操作，可以是数组、List等。
+
+* Enumerable类，对继承了IEnumerable<T>接口的集合进行扩展；
+* Queryable类，针对继承了IQueryable<T>接口的集合进行扩展。
+* DbSet<T>实现了IQueryable<T>、IEnumerable<T>接口。通过两个静态类对DbSet<T>进行扩展操作，这两个类对实现了IQueryable<T>、IEnumerable<T>接口的集合进行了很多方法的扩展（All,Any, Average,Where等）
+
+Enumerable类中Where方法定义。
+``` csharp
+  public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate);
+  public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, Func<TSource, int, bool> predicate);
+
+```
+
+Queryable类中Where方法定义，
+``` csharp
+  public static IQueryable<TSource> Where<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, bool>> predicate);
+  public static IQueryable<TSource> Where<TSource>(this IQueryable<TSource> source, Expression<Func<TSource, int, bool>> predicate);
+```
+IQueryable接口会把查询表达式先缓存到表达式树中，只有当真正遍历发生的时候，才会由IQueryProvider解析表达式树，生成sql语句执行数据库查询操作。
