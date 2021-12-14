@@ -14,7 +14,7 @@ keywords: "dotnet,python,C#,linux,js,jquery,javascript,开发者,程序猿,程�
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://edsiongithub.github.io/
 root: /
-permalink: :title/
+permalink: :year/:month/:day/:id/
 #permalink: :year/:month/:day/:title/
 tag_dir: tags
 archive_dir: archives

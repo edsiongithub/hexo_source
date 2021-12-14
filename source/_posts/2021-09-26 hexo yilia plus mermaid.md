@@ -2,6 +2,7 @@
 title: hexo yilia plus主题支持mermaid流程图
 date: 2021-09-26 10:04:00
 layout: 2021-09-26
+id: 0020
 tags: 
  - hexo
  - mermaid

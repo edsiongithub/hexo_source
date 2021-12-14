@@ -2,6 +2,7 @@
 title: windows powershell 常用功能
 date: 2021-09-17 10:04:00
 layout: 2021-09-17
+id: 0019
 tags: 
  - powershell
 ---

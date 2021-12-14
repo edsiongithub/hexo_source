@@ -2,6 +2,7 @@
 title: Linux上创建开发asp.net core应用
 date: 2021-06-03 10:04:00
 reward: true
+id: 0012
 tags: 
  - linux
  - asp.net core

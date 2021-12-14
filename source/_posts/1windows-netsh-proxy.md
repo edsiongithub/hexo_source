@@ -2,6 +2,7 @@
 title: windows上使用netsh映射端口至Hyper-v虚拟机
 date: 2021-10-18 08:17:11
 layout: 2021-10-18 08:17:11
+id: 0022
 tags:
  - windowns
  - netsh proxy
