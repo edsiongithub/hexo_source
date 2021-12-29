@@ -60,6 +60,14 @@ dotnet new -au None -n coremvcdemo
         数学,
         化学 
     }
+
+    public class HomeDetailsViewModel
+    {
+       public Student student {get;set;}
+
+        public string PageTitle {get;set;}
+    
+    }
 ```
 
 ```csharp
@@ -112,6 +120,9 @@ dotnet new -au None -n coremvcdemo
 ### 准备Controller、Views
 
 修改HomeController代码如下
+<details>
+<summary> 点击查看 HomeController 代码</summary>
+
 ```csharp
 public class HomeController : Controller
 {
@@ -158,6 +169,8 @@ public class HomeController : Controller
    }
 }
 ```
+</details>
+
 
 Views目录下创建Index.cshtml、Details.cshtml、Create.cshtml
 Index.cshtml代码如下，用来展示学生列表。
@@ -183,6 +196,12 @@ Index.cshtml代码如下，用来展示学生列表。
 ```
 
 Create.cshtml代码如下，提供学生信息新增。
+
+<details>
+<summary>
+ 查看代码
+</summary>
+
 ```html
 @model Student 
 @inject IStudentRepository _studentRepository 
@@ -239,6 +258,23 @@ Create.cshtml代码如下，提供学生信息新增。
 </form>
 ```
 
+
+</details>
+
+### Program.cs中使用不同方式注册及运行结果
+
+```csharp
+using coremvcdemo;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddMvc();//.AddControllersWithViews();
+//使用不同方式注册服务
+builder.Services.AddScoped<IStudentRepository, MockStudentRepositry>();
+//builder.Services.AddSingleton<IStudentRepository, MockStudentRepositry>();
+//builder.Services.AddTransient<IStudentRepository, MockStudentRepositry>();
+```
 
 ![Singleton](https://raw.githubusercontent.com/edsiongithub/blogimages/master/202112/Singleton.gif)
 <center>图一、AddSingleton方式注入</center>
