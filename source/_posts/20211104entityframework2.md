@@ -6,6 +6,9 @@ id: 0025
 tags:
  - C#
  - EntityFramework
+categories:
+ - C#
+ - EntityFramework
 ---
 
 记录一些EntityFramework中的使用技巧，不定期更新。

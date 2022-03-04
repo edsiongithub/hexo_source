@@ -5,6 +5,8 @@ layout: 2021-09-17
 id: 0019
 tags: 
  - powershell
+categories:
+ - 操作系统及网络
 ---
 
 使用windowns操作系统的，对cmd命令提示符不会陌生。powershell可以看作cmd的升级版，可以通过powershell命令做许多自动化管理。这里记录在powershell使用过程中遇到的一些问题解决，以及一些常用的使用命令。

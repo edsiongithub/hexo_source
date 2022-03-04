@@ -6,6 +6,8 @@ id: 0020
 tags: 
  - hexo
  - mermaid
+categories:
+ - hexo，git and markdown
 ---
 
 hexo默认不支持流程图，需要安装插件才能使用。具体参考

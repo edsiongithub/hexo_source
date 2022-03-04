@@ -6,6 +6,8 @@ id: 0032
 tags:
  - linux
  - rabbitmq
+categories:
+ - 操作系统及网络
 ---
  
 * rabbitmq 简介

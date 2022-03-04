@@ -8,6 +8,8 @@ tags:
  - asp.net core
  - vs code
  - 远程开发
+categories:
+ - ASP.NET Core
 ---
 
 前面的一篇文章，已经将windows中使用Visual Studio 2019创建并开发的 ```asp.net core```应用部署至一台Linux服务器中，一睹dotnet core的跨平台威力。接下来，我们直接在Linux主机上创建项目，并编译执行。同时，使用VS Code在windows平台上实现远程开发。

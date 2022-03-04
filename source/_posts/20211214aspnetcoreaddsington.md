@@ -6,6 +6,8 @@ id: 0030
 tags:
 - asp.net core
 - DI/IoC
+categories:
+ - ASP.NET Core
 ---
 
 * 三者基本概念

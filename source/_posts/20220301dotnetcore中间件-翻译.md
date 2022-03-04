@@ -7,6 +7,9 @@ tags:
  - dotnet core
  - Middleware
  - 翻译
+categories:
+ - ASP.NET Core
+ - 翻译
 ---
  
  准备翻译dotnet tutorial网站上一些dotnet方面的知识文章。先从中间件开始，原文地址：

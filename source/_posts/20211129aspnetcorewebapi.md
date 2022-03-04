@@ -6,6 +6,8 @@ id: 0029
 tags:
  - asp.net core
  - web api
+categories:
+ - ASP.NET Core
 ---
 
 本文包含：

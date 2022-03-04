@@ -5,6 +5,8 @@ layout: 2021-10-28 15:35:23
 id: 0024
 tags:
  - sqlserver
+categories:
+ - 数据库
 ---
 
 

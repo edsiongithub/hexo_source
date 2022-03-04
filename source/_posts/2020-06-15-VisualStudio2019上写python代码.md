@@ -6,6 +6,8 @@ id: 0003
 tags: 
  - visual studio
  - python
+categories:
+ - python
 ---
 
 # 闲话

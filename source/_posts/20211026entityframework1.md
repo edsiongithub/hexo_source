@@ -6,6 +6,9 @@ id: 0023
 tags:
  - C#
  - EntityFramework
+categories:
+ - C#
+ - EntityFramework
 ---
 
 使用EntityFrameWork基本步骤，Db First模式

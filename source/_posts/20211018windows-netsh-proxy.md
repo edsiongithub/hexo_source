@@ -6,6 +6,8 @@ id: 0022
 tags:
  - windowns
  - netsh proxy
+categories:
+ - 操作系统及网络
 ---
 
 前段时间折腾Hyper-v虚拟机的双网卡功能，按照某些教程，理论上一个内部网络接口，一个外部网络接口，是能够满足需求了的。

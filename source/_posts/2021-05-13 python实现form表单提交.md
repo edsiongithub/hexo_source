@@ -6,6 +6,8 @@ date: 2021-05-13 09:42:27
 id: 0008
 tags:
  - python
+categories:
+ - python
 ---
 
 ## 缘起

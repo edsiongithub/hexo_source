@@ -6,6 +6,8 @@ id: 0009
 tags: 
  - C#
  - winform
+categories:
+ - C#
 ---
 
 ## 缘起

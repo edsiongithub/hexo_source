@@ -6,6 +6,8 @@ id: 0026
 tags:
  - C#
  - 异步编程
+categories:
+ - C#
 ---
 
 * 异步编程场景

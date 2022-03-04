@@ -2,10 +2,13 @@
 title: ASP.NET Core中间件处理请求管线
 date: 2022-03-03 15:26:53
 layout: 2022-03-03 15:26:53
-id: 0034
+id: 0035
 tags:
  - dotnet core
  - Middleware
+ - 翻译
+categories:
+ - ASP.NET Core
  - 翻译
 ---
  这是第二篇关于`ASP.NET Core`中间件的翻译文章， 原文地址：
@@ -149,6 +152,19 @@ app.Run();
     var builder = WebApplication.CreateBuilder(args);
     // Add services to the container.
     var app = builder.Build();
+    //由于该自己解决后面没有中间件了，因此在上面实现中间件的InvokeAsync方法中，就不能调用next.Invoke()
     app.UseMyMiddleWareHandler();
     app.Run();
 ```
+
+另外一点区别：
+dotnet 6.0版本中，app.Run()最后这个方法是WebApplication中的Run方法，查看它的说明如下。即我们的应用必须得有调用这个方法。而Run方法还可以用来配置之前我们提到的端点中间件（即该中间件不能再调下一个中间件）。
+
+![](https://raw.githubusercontent.com/edsiongithub/blogimages/master/202203/apprun.png)
+我们可以使用Run的一个扩展方法来配置端点中间件，如下：
+![](https://raw.githubusercontent.com/edsiongithub/blogimages/master/202203/apprunextension.png)
+
+下图是`ASP.NET Core MVC`和`Razor Pages`应用的完整请求处理管线。
+![](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/middleware/index/_static/middleware-pipeline.svg?view=aspnetcore-6.0)
+
+![](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/middleware/index/_static/mvc-endpoint.svg?view=aspnetcore-6.0)
