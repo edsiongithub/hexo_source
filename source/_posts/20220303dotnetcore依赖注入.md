@@ -151,47 +151,46 @@ namespace FirstCoreMVCWebApplication.Controllers
 当修改了IStudentRepository接口的实现类时，我们同时需要修改HomeController类。在`ASP.NET Core`应用中，我们可以使用依赖注入设计模式来解决。
 
 ### 什么是依赖注入设计模式
-The Dependency Injection a process of injecting the object of a class into a class that depends on it. The Dependency Injection is the most commonly used design pattern nowadays to remove the dependencies between the objects that allow us to develop loosely coupled software components.
+依赖注入是将一个类的对象注入到另一个依赖于该类的类中。依赖注入是目前最流行的一种设计模式，它能去除对象间的依赖从而开发松耦合的软件模块。
 
-Let us discuss the step by step procedure to implement dependency injection in ASP.NET Core MVC application.
+下面我们来一步一步在`ASP.NET Core MVC`应用中实现依赖注入。
 
 #### `ASP.NET Core`中的依赖注入
-The ASP.NET Core Framework is designed from scratch to support inbuilt support for Dependency Injection. The ASP.NET Core Framework injects objects of dependency classes through constructor or method by using a built-in IoC (Inversion of Control) container.
+`ASP.NET Core`框架支持内置依赖注入，`ASP.NET Core`框架中类依赖的对象可以通过内置IoC（Inverse of Control 控制反转）容器使用构造函数或者方法的方式注入。
 
 ![](https://dotnettutorials.net/wp-content/uploads/2019/03/word-image-19.png)
-ASP.NET Core framework contains simple out-of-the-box IoC containers which do not have as many features as other third party IoC containers such as Unity, StructureMap, Castle Windsor, Ninject, etc. If you want more features such as auto-registration, scanning, interceptors, or decorators then you may replace the built-in IoC container with a third-party container.
+`ASP.NET Core`框架包含一个简单的开箱即用的IoC容器，该容器与其他第三方IoC容器，如Unity、StructureMap、Castle Windsor、Ninject相比没有那么丰富的功能。如果你想使用更多的特性，如自动注册、扫描、拦截器、装饰器等，那么你需要使用第三方IoC容器来替换内置的IoC容器。
 
-The built-in container is represented by IServiceProvider implementation that supports constructor injection by default. The types (classes) managed by built-in IoC containers are called services.
+内置的容器通过`IServiceProvider`接口的实现来表示，默认支持构造函数方式注入。内置IoC容器管理的类被成为服务。
 
 ### `ASP.NET Core`中服务的类型
-There are two types of services in ASP.NET Core. They are as follows:
+`ASP.NET Core`中的服务类型有两种：
 
-Framework Services: Services that are a part of the ASP.NET Core framework such as IApplicationBuilder, IHostingEnvironment, ILoggerFactory, etc.
-Application Services: The services (custom types or classes) which you as a programmer create for your application.
-In order to let the IoC container automatically inject our application services, we first need to register them with the IoC container.
+1. 框架服务：`ASP.NET Core`框架中包含的一部分服务，如`IApplicationBuilder`、`IHostingEnvironment`、`ILoggerFactory`等。
+2. 应用服务：有程序员为自己的应用创建的服务（自定义类型或者类）。
+
+为了容IoC容器自动注入我们的应用服务，我们需要首先向容器中注册这些服务。
 
 ### 如何向`ASP.NET Core`依赖注入容器中注册服务
-We need to register a service with ASP.NET Core Dependency Injection Container within the ConfigureServices() method of the Startup class.
+我们需要在Startup类中使用`ConfigureServices()`方法向`ASP.NET Core`依赖注入容器中注册一个服务。
 
-Before we discuss how to register a service with the Dependency Injection Container, it is important to understand the lifetime of service. When a class receives the dependency object through dependency injection, then whether the instance it receives is unique to that instance of the class or not depends on the lifetime of the service. Setting the lifetime of the dependency object determines how many times the dependency object needs to be created.
+在我们讨论如何向依赖注入容器中注册服务前，先了解服务的生命周期非常重要。当一个类通过依赖注入接收到依赖对象，无论它接收到的实例对该类是唯一的或者不依赖于服务的生命周期。（这一句没翻译明白，原话： When a class receives the dependency object through dependency injection, then whether the instance it receives is unique to that instance of the class or not depends on the lifetime of the service.）设置依赖对象的生命周期决定了依赖对象需要被创建多少次。
 
 ### `ASP.NET Core`提供哪些方法来注册服务
+`ASP.NET Core`提供以下3中方法向依赖注入容器注册服务。选择不同的方法注册服务决定了服务的生命周期。
 
-The ASP.NET core provides 3 methods to register a service with the ASP.NET Core Dependency Injection container as follows. The method that we use to register a service will determine the lifetime of that service.
+<strong>Singleton</strong>
+ 这种情况下，IoC容器在整个应用生命周期中，只创建一次对象实例并共享使用。
+<strong>Transient</strong>
+这种情况下，IoC容器在你每次请求该服务时，会创建一个新的服务实例。
+<strong>Scoped</strong>
+这种情况下，IoC容器在每次请求时创建一个新的服务实例并在每个请求中共享该实例。
 
-Singleton
-Transient
-Scoped
-Singleton: In this case, the IoC container will create and share a single instance of a service object throughout the application’s lifetime.
-
-Transient: In this case, the IoC container will create a new instance of the specified service type every time you ask for it.
-
-Scoped: In this case, the IoC container will create an instance of the specified service type once per request and will be shared in a single request.
-
-Note: The Built-in IoC container manages the lifetime of a registered service. It automatically disposes of a service instance based on the specified lifetime.
+注意：IoC内置容器管理注册服务的生命周期，它将根据服务实例的生命周期来自动释放服务实例。
 
 ### 使用`ASP.NET Core`依赖注入注册TestStudentRepository
-We need to configure the service instance within the ConfigureServices() method of the Startup class. The following code shows how to register a service with different lifetimes:
+我们需要在Startup类中使用`ConfigureServices()`方法中配置服务实例，下面代码展示如何注册一个不同生命周期的服务:
+
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
@@ -206,7 +205,7 @@ public void ConfigureServices(IServiceCollection services)
 ```
 
 ### 扩展方法来注册
-ASP.NET Core framework includes extension methods for each types of lifetime; AddSingleton(), AddTransient() and AddScoped() methods for singleton, transient and scoped lifetime respectively. The following example shows the ways of registering types (service) using extension methods.
+`ASP.NET Core`框架为每种生命周期注册方法提供扩展方法：`AddSingleton()`,`AddTransient()`,` AddScoped()`方法分别对应`singleton`, `transient` , `scoped`生命周期。下面代码展示使用扩展方法来注册不同生命周期的服务对象：
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
@@ -221,7 +220,7 @@ public void ConfigureServices(IServiceCollection services)
     services.AddScoped(typeof(IStudentRepository), typeof(TestStudentRepository));
 }
 ```
-So, let us use the Single Instance of the service in this example. So, modify the ConfigureService method of the Startup class as shown below. Which method you want to use to register your application service to the built-in IoC Container is your personal preference. I am going to use the following.
+我们使用唯一实例服务类型来举例。修改`Startup`类中的`ConfigureService`方法，选择哪种方法向IoC容器中注册你的服务是你的个人选择，我将使用下面这种（扩展方法的方式）：
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
@@ -233,7 +232,8 @@ public void ConfigureServices(IServiceCollection services)
 ```
 
 #### `ASP.NET Core MVC`应用中构造函数注入
-Once we register the service, the IoC container automatically performs constructor injection if a service type is included as a parameter in a constructor. Let us modify the HomeController as shown below to use the Constructor dependency injection.
+一旦我们注册服务，如果该服务类作为构造函数的一个参数，则IoC容器自动使用构造韩式方式注入服务。我们修改HomeController控制器代码如下，来使用构造函数方式实现注入：
+
 ```csharp
 using FirstCoreMVCWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -262,16 +262,17 @@ namespace FirstCoreMVCWebApplication.Controllers
     }
 }
 ```
-Code Explanation:
-In the above example, the IoC container will automatically pass an instance of the TestStudentRepository to the constructor of HomeController. We don’t need to do anything else. An IoC container will create and dispose of an instance of the IStudentRepository based on the registered lifetime. As we are injecting the dependency object through a constructor, it is called as constructor dependency injection.
+代码解释：
+在上面的例子中，IoC容器自动向HomeController传递一个TestStudentRepository的对象实例，我们无需做任何更多的操作。IoC容器会根据注册服务的生命周期来创建并销毁IStudentRepository对象实例。因为我们使用构造函数方式注入对象，这就叫做构造函数依赖注入。
 
-We created the _ repository variable as read-only which will ensure that once we injected the dependency object then that value can never be changed.
+我们创建一个只读的`_repository`变量，这样一旦我们注入了依赖的对象，这个对象将不会再改变。
 
-At this point, run the application and you should get the output as expected as shown in the below image.
+运行我们的应用，你将获得如下图所示的输出：
+
 ![](https://dotnettutorials.net/wp-content/uploads/2019/03/word-image-21.png)
 
 #### `ASP.NET Core MVC`应用中Action方法注入
-Sometimes we may only need a dependency service type in a single action method. For this, use the [FromServices] attribute with the service type parameter in the method.
+有时我们可能只需要向某个具体的action方法中注入依赖对象。我们可以使用`[FromServices]`特性来标注，使用服务类型作为方法的参数。如下例所示：
 ```csharp
 using FirstCoreMVCWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -291,13 +292,14 @@ namespace FirstCoreMVCWebApplication.Controllers
     }
 }
 ```
-Run the application and you will get the expected output as shown below.
+运行应用，你会获得下面的输出：
 ![](https://dotnettutorials.net/wp-content/uploads/2019/03/word-image-22.png)
 #### 属性注入
 内置IoC容器不支持属性注入，如果需要的话，得使用第三方IoC容器。
 
 ### 手动获取服务
-It is not required to include dependency services in the constructor. We can access dependent services configured with built-in IoC containers manually using the RequestServices property of HttpContext as shown below.
+依赖服务不是必须要包含在构造函数中，我们可以通过内置IoC容器配置，使用`HttpContext`的属性`RequestSerices`来手动获取依赖服务，如下面例子所示：
+
 ```csharp
 using FirstCoreMVCWebApplication.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -325,28 +327,33 @@ namespace FirstCoreMVCWebApplication.Controllers
     }
 }
 ```
-With the above changes in place, run the application and you should get the output as expected as shown in the below image.
+将HomeController代码修改成如上，运行应用后将获得如下所示的输出。
 ![](https://dotnettutorials.net/wp-content/uploads/2019/03/word-image-23.png)
-Note: It is recommended to use constructor injection instead of getting it using RequestServices.
+注意：推荐使用构造函数注入而不是使用`RequestServices`。
 
 ### 什么时候该用谁
-In real-time applications, you need to register the components such as application-wide configuration as Singleton. The Database access classes like Entity Framework contexts are recommended to be registered as Scoped so that the connection can be re-used. If you want to run anything in parallel then it is better to register the component as Transient.
+在实时应用中，你需要将一些组件如应用范围内的配置注册成Sigleton。数据库访问类如EntityFramework上下文推荐注册为Scoped，这样数据库连接可以被复用。如果你想并行执行任何内容，最好将该组件注册为Transient。
+简而言之：
+<strong>AddSingleton():</strong>
+当我们使用AddSingleton()方法注册服务，将创建一个singleton服务。该实例将在应用中的所有组件中共享使用。第一次请求该服务时创建singleton服务。
 
-So, in short:
-AddSingleton(): When we use the AddSingleton() method to register a service, then it will create a singleton service. It means a single instance of that service is created and that singleton instance is shared among all the components of the application that require it. That singleton service is created when we requested for the first time.
+<strong>AddScoped():</strong>
+Scoped意味着每个请求一个实例。当我们使用AddScoped()方法注册服务，创建一个Scoped服务。意味着每个HTTP请求到达时创建该服务，并在该HTTP请求中的其他调用中共性使用该服务实例。
 
-AddScoped(): Scoped means instance per request. When we use the AddScoped() method to register a service, then it will create a Scoped service. It means, an instance of the service is created once per each HTTP request and uses that instance in other calls of the same request.
+<strong>AddTransient():</strong>
+当我们使用AddTransient()方法注册服务时，创建Transient类型服务。意味着对特定服务的每次请求（调用）创建一个新的实例，这些实例不会共享使用。
 
-AddTransient(): When we use the AddTransient() method to register a service, then it will create a Transient service. It means a new instance of the specified service is created each time when it is requested and they are never shared.
-
-What are the advantages of using ASP.NET Core Dependency Injection?
-The ASP.NET Core Dependency Injection allows us to develop loosely coupled software components. Using the ASP.NET Core Dependency Injection, it is very easy to swap with a different implementation of a component.
-
-In the next article, I am going to discuss the Controllers in ASP.NET Core MVC application. Here, in this article, I try to explain the ASP.NET Core Dependency Injection with an example. I hope this article will help you to understand the concept of Dependency Injection in ASP.NET Core Application. 
+使用`ASP.NET Core`依赖注入有什么有点？
+`ASP.NET Core`依赖注入允许我们开发松耦合的软件组件。使用`ASP.NET Core`依赖注入，可以很容易将一个组件的实现替换成另外一个不同的实现。
+在下一篇文章，我将讨论`ASP.NET Core MVC`应用中的控制器。本篇我视图通过例子解释`ASP.NET Core`依赖注入。希望这篇文章有助于你理解`ASP.NET Core`依赖注入的概念。
 
 ### 参考
 <a href="https://dotnettutorials.net/course/dot-net-design-patterns/">设计模式</a>
 <a href="https://dotnettutorials.net/lesson/dependency-injection-design-pattern-csharp/">依赖注入</a>
 <a href="https://dotnettutorials.net/lesson/introduction-to-inversion-of-control/">IoC容器</a>
+
+
+### 译者注
+在翻译这篇文章前，我写过一篇<a href="https://edsiongithub.github.io/2021/12/14/24/">关于`ASP.NET Core`依赖注入</a>的文章。通过一个完整的MVC例子演示了三种扩展方法注册服务，获得服务实例的生命周期。以及选择使用哪种情况选择哪个方法来注册服务。
 
 
