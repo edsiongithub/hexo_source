@@ -26,68 +26,67 @@ graph TD
 
 ``` csharp
 static void Main(string[] args)
-		{
-			string publicKey = @"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq+lUR3gGmR/UEUmpSsjj
-            vXBxYFOjUgzvg42PAvfPOL8LDD78Yu00crqcsBAJBLwrP............................................................IriWnXLlEjfGmqvDFiSQG4Q1nSRHIxpnd
-            VLrTtxtDXW3NO9H5PM8wyESv+G2hXmankwSg6ipuEehKhFBw90nSTbR/+dibASvU
-            .............
-            .............
-			";
+{
+	string publicKey = @"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq+lUR3gGmR/UEUmpSsjj
+	vXBxYFOjUgzvg42PAvfPOL8LDD78Yu00crqcsBAJBLwrP............................................................IriWnXLlEjfGmqvDFiSQG4Q1nSRHIxpnd
+	VLrTtxtDXW3NO9H5PM8wyESv+G2hXmankwSg6ipuEehKhFBw90nSTbR/+dibASvU
+	.............
+	.............
+	";
 
-            string bastionHostIP = "https://xxx.xx.xx.xx/index.php";
-            string module = "ApiUser";
-            string action = "getinfo";
-            string url = bastionHostIP + "/" + module + "/" + action;
+	string bastionHostIP = "https://xxx.xx.xx.xx/index.php";
+	string module = "ApiUser";
+	string action = "getinfo";
+	string url = bastionHostIP + "/" + module + "/" + action;
 
-            User user = new User();
-			user.id = "asdf";
-			user.account = "asdf";
+	User user = new User();
+	user.id = "asdf";
+	user.account = "asdf";
 
-			//json封装
-            string json = JsonConvert.SerializeObject(user);
-			//rsa加密
-            string rsa_json = RSAEncrypt(RSAPublicKey(publicKey), json);
+	//json封装
+	string json = JsonConvert.SerializeObject(user);
+	//rsa加密
+	string rsa_json = RSAEncrypt(RSAPublicKey(publicKey), json);
 
 
-			//post 数据
-			Console.WriteLine(HttpHelper.HttpPost(url, "", rsa_json, "application/json"));
-			Console.ReadLine();
-		}
+	//post 数据
+	Console.WriteLine(HttpHelper.HttpPost(url, "", rsa_json, "application/json"));
+	Console.ReadLine();
+}
 ```
 
 ``` csharp
+/// <summary>    
+/// RSA公钥pem-->XML格式转换， 
+/// </summary>    
+/// <param name="publicKey">pem公钥</param>    
+/// <returns></returns>    
+private static string RSAPublicKey(string publicKey)
+{
+	RsaKeyParameters publicKeyParam = (RsaKeyParameters)PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKey));
+	string XML = string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent></RSAKeyValue>",
+	Convert.ToBase64String(publicKeyParam.Modulus.ToByteArrayUnsigned()),
+	Convert.ToBase64String(publicKeyParam.Exponent.ToByteArrayUnsigned()));
+	return XML;
+}
 
-		/// <summary>    
-		/// RSA公钥pem-->XML格式转换， 
-		/// </summary>    
-		/// <param name="publicKey">pem公钥</param>    
-		/// <returns></returns>    
-		private static string RSAPublicKey(string publicKey)
-		{
-			RsaKeyParameters publicKeyParam = (RsaKeyParameters)PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKey));
-			string XML = string.Format("<RSAKeyValue><Modulus>{0}</Modulus><Exponent>{1}</Exponent></RSAKeyValue>",
-			Convert.ToBase64String(publicKeyParam.Modulus.ToByteArrayUnsigned()),
-			Convert.ToBase64String(publicKeyParam.Exponent.ToByteArrayUnsigned()));
-			return XML;
-		}
-
-		/// <summary>
-		/// RSA公钥加密数据
-		/// </summary>
-		/// <param name="xmlPublicKey"></param>
-		/// <param name="content"></param>
-		/// <returns></returns>
-		private static string RSAEncrypt(string xmlPublicKey , string content)
-		{
-			string encryptedContent = string.Empty;
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
-            {
-                rsa.FromXmlString(xmlPublicKey);
-                byte[] encryptedData = rsa.Encrypt(Encoding.Default.GetBytes(content), false);
-                encryptedContent = Convert.ToBase64String(encryptedData);
-            }
-            return encryptedContent;
-		}
+/// <summary>
+/// RSA公钥加密数据
+/// </summary>
+/// <param name="xmlPublicKey"></param>
+/// <param name="content"></param>
+/// <returns></returns>
+private static string RSAEncrypt(string xmlPublicKey , string content)
+{
+	string encryptedContent = string.Empty;
+	using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+	{
+		rsa.FromXmlString(xmlPublicKey);
+		byte[] encryptedData = rsa.Encrypt(Encoding.Default.GetBytes(content), false);
+		encryptedContent = Convert.ToBase64String(encryptedData);
+	}
+	return encryptedContent;
+}
 
 ```
 
